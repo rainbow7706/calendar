@@ -2,7 +2,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require moment
 //= require_tree .
 
 function moveEvent(event, dayDelta, minuteDelta, allDay){
