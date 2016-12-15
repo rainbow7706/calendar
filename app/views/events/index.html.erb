@@ -6,7 +6,6 @@
   <%=link_to 'Create Event', new_event_url, :id => 'new_event' %>
  | <%=link_to 'Logout', destroy_user_session_path,method: :delete %>
 </p>
-
 <script>
   
   
@@ -42,7 +41,7 @@
               center: 'title',
               right: 'month,agendaWeek,agendaDay'
           },
-          defaultView: 'agendaWeek',
+          defaultView: 'month',
           height: 500,
           slotMinutes: 15,
           loading: function(bool){
@@ -52,6 +51,7 @@
                   $('#loading').hide();
           },
           events: "/events/get_events",
+              //eventColor: '#378006',
           timeFormat: 'h:mm t{ - h:mm t} ',
           dragOpacity: "0.5",
           eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc){
@@ -76,7 +76,18 @@
               showEventDetails(event);
           },
       
-      
+          dayClick: function(date, jsEvent, view,resourceObj) {
+
+            alert('Clicked on: ' + date.format());
+
+            alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+            alert('Current view: ' + view.name);
+
+            // change the day's background color just for fun
+            $(this).css('background-color', 'red');
+
+         },
       
       
       });

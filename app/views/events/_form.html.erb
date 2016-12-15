@@ -4,6 +4,7 @@
   <%=f.label :title %>
   <br/>
   <%=f.text_field :title %>
+<input type='text' id="custom"  name="event[color]" value="#ff0000" />
 </p>
 <p>
   <%=f.label :description %>
@@ -24,6 +25,8 @@
   <%=f.label :all_day %>
   <%=f.check_box :all_day %>
 </p>
+
+
 <p>
   <%=f.label :period, "Repeats" %>
   <%=f.select :period, Event::REPEATS,{}, :onchange => "showPeriodAndFrequency(this.value);" %>
@@ -37,3 +40,10 @@
   <%=f.submit 'Create' %> <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>
 </p>
 <%end %>
+
+<script>
+$("#custom").spectrum({
+      preferredFormat: "hex",
+      color: "#ff0000"
+});
+</script>

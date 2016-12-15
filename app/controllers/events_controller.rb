@@ -25,10 +25,10 @@ class EventsController < ApplicationController
   
   
   def get_events
-    @events = Event.find(:all, :conditions => ["starttime >= '#{Time.at(params['start'].to_i).to_formatted_s(:db)}' and endtime <= '#{Time.at(params['end'].to_i).to_formatted_s(:db)}'"] )
+    @events = Event.where("starttime >= ? and endtime <= ?",Time.at(params['start'].to_i).to_formatted_s(:db) , Time.at(params['end'].to_i).to_formatted_s(:db))
     events = [] 
     @events.each do |event|
-      events << {:id => event.id, :title => event.title, :description => event.description || "Some cool description here...", :start => "#{event.starttime.iso8601}", :end => "#{event.endtime.iso8601}", :allDay => event.all_day, :recurring => (event.event_series_id)? true: false}
+      events << {:id => event.id, :title => event.title, :description => event.description || "Some cool description here...", :start => "#{event.starttime.iso8601}", :end => "#{event.endtime.iso8601}", :allDay => event.all_day, :recurring => (event.event_series_id)? true: false,:color=>event.color}
     end
     render :text => events.to_json
   end
@@ -80,8 +80,9 @@ class EventsController < ApplicationController
     @event = Event.find_by_id(params[:id])
     if params[:delete_all] == 'true'
       @event.event_series.destroy
+      logger.warn("===========Deleting...done,....====")
     elsif params[:delete_all] == 'future'
-      @events = @event.event_series.events.find(:all, :conditions => ["starttime > '#{@event.starttime.to_formatted_s(:db)}' "])
+      @events = @event.event_series.events.where("starttime > ?",@event.starttime.to_formatted_s(:db))
       @event.event_series.events.delete(@events)
     else
       @event.destroy
@@ -91,7 +92,7 @@ class EventsController < ApplicationController
 
   private
     def event_params
-      params.require(:event).permit('title', 'description', 'starttime(1i)', 'starttime(2i)', 'starttime(3i)', 'starttime(4i)', 'starttime(5i)', 'endtime(1i)', 'endtime(2i)', 'endtime(3i)', 'endtime(4i)', 'endtime(5i)', 'all_day', 'period', 'frequency', 'commit_button')
+      params.require(:event).permit('title', 'description', 'starttime(1i)', 'starttime(2i)', 'starttime(3i)', 'starttime(4i)', 'starttime(5i)', 'endtime(1i)', 'endtime(2i)', 'endtime(3i)', 'endtime(4i)', 'endtime(5i)', 'all_day', 'period', 'frequency', 'commit_button','color')
     end
   
 end
